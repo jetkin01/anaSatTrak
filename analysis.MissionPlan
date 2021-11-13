@@ -1,0 +1,728 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<FreeFlyerProjectFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" timePrecisionMode="nanosecond" schemaVersion="7.6.0.2">
+  <ProjectInformation>
+    <Author />
+    <Source />
+    <FreeFlyerVersion>7.6.1.54738</FreeFlyerVersion>
+    <RevisionNumber />
+    <Title />
+    <Subject />
+    <Category />
+    <Keywords />
+    <Comments />
+    <Notes />
+  </ProjectInformation>
+  <ProjectPreferences>
+    <General>
+      <LockProjectFromEditing>false</LockProjectFromEditing>
+    </General>
+    <OnOpen>
+      <ShowControlSequence>true</ShowControlSequence>
+      <ShowEmptyEnvironment>false</ShowEmptyEnvironment>
+      <ShowNotes>false</ShowNotes>
+      <ShowHome>false</ShowHome>
+      <ShowOutput>false</ShowOutput>
+      <CreateBackup>false</CreateBackup>
+      <BackupLocation></BackupLocation>
+    </OnOpen>
+    <OnRun>
+      <SaveMissionPlan>false</SaveMissionPlan>
+      <HideWarningMessages>false</HideWarningMessages>
+    </OnRun>
+  </ProjectPreferences>
+  <ProjectDataFiles>
+    <EarthOrientationFile useDefault="true"></EarthOrientationFile>
+    <ElectronDensityCoefficientFile useDefault="true"></ElectronDensityCoefficientFile>
+    <GeopotentialFile useDefault="true"></GeopotentialFile>
+    <HarrisPriesterDragFile useDefault="true"></HarrisPriesterDragFile>
+    <JacchiaAtmosphereModelFile useDefault="true"></JacchiaAtmosphereModelFile>
+    <LeapSecondFile useDefault="true"></LeapSecondFile>
+    <MagneticFieldFile useDefault="true"></MagneticFieldFile>
+    <PlanetaryFile useDefault="true"></PlanetaryFile>
+    <StationGeodeticsFile useDefault="true"></StationGeodeticsFile>
+    <SolidTideFile useDefault="true"></SolidTideFile>
+    <DSTFile useDefault="true"></DSTFile>
+    <StarFieldFile useDefault="true"></StarFieldFile>
+  </ProjectDataFiles>
+  <ProjectObjects>
+    <Object>
+      <SolarSystem name="FF_SolarSystem" isConstant="false" isGlobal="true">
+        <Name>FF_SolarSystem</Name>
+        <ComputePolarMotion>true</ComputePolarMotion>
+        <ApplyUT1Correction>true</ApplyUT1Correction>
+        <COUpdateInterval units="s" displayed_units="s">0</COUpdateInterval>
+        <NPUpdateInterval units="s" displayed_units="s">1800</NPUpdateInterval>
+        <IonosphereOptions>
+          <IonosphereOptions name="FF_SolarSystem_|ionoOptions|" isConstant="false" isGlobal="true">
+            <Name>FF_SolarSystem_|ionoOptions|</Name>
+            <MaximumHeight units="km" displayed_units="km">1000</MaximumHeight>
+            <MinimumHeight units="km" displayed_units="km">80</MinimumHeight>
+            <IntegrationStepSize units="km" displayed_units="km">25</IntegrationStepSize>
+            <ScaleFactor units="" displayed_units="">1</ScaleFactor>
+            <Model>0</Model>
+            <metadata dim="0" />
+          </IonosphereOptions>
+        </IonosphereOptions>
+        <NoradKeplerEqTolerance units="" displayed_units="">1e-12</NoradKeplerEqTolerance>
+        <metadata dim="0" />
+      </SolarSystem>
+    </Object>
+    <Object>
+      <ConsoleWindow name="Console" isConstant="false" isGlobal="true">
+        <Name>Console</Name>
+        <WindowTitle>Console</WindowTitle>
+        <WordWrap>false</WordWrap>
+        <CurrentTextColor>0</CurrentTextColor>
+        <BackColor>16777215</BackColor>
+        <Dimension units="" displayed_units="">10</Dimension>
+        <DockMode>1</DockMode>
+        <CurrentFontType>0</CurrentFontType>
+        <UseStdOut>false</UseStdOut>
+        <ShowOnRun>false</ShowOnRun>
+        <metadata dim="0" />
+      </ConsoleWindow>
+    </Object>
+  </ProjectObjects>
+  <ProjectMissionSequence>
+    <ProjectExternals>
+      <ProjectExternal included="true" autosave="true" contentType="FreeFlyerScript">C:\Users\joshua.etkind\Repositories\freeflyer_procedure_library\PlotProcedures.FFProcedure</ProjectExternal>
+    </ProjectExternals>
+    <ProjectCommands>
+      <FreeForm enabled="true">
+        <Label>Structure</Label>
+        <Bookmarks />
+        <Breakpoints />
+        <FreeFormScript><![CDATA[
+Struct CatDataPoint;
+    
+    @JsonPropertyName("CREATION_DATE")
+    String createdDateString;
+    
+    @JsonPropertyName("TIME_SYSTEM")
+    String timeSystem;
+    
+    @JsonPropertyName("EPOCH")
+    String epochString;
+    
+    @JsonPropertyName("MEAN_MOTION")
+    String meanMotionString;
+    
+    @JsonPropertyName("ECCENTRICITY")
+    String eccentricityString;
+    
+    @JsonPropertyName("INCLINATION")
+    String inclinationString;
+    
+    @JsonPropertyName("RA_OF_ASC_NODE")
+    String raanString;
+    
+    @JsonPropertyName("ARG_OF_PERICENTER")
+    String aopString;
+    
+    @JsonPropertyName("MEAN_ANOMALY")
+    String meanAnomalyString;    
+    
+    @JsonPropertyName("NORAD_CAT_ID")
+    String noradCatId;    
+    
+    @JsonPropertyName("REV_AT_EPOCH")
+    String revAtEpochString;
+    
+    @JsonPropertyName("BSTAR")
+    String bStarString;
+    
+    @JsonPropertyName("MEAN_MOTION_DOT")
+    String meanMotionDotString;
+    
+    @JsonPropertyName("MEAN_MOTION_DDOT")
+    String meanMotionDDotString;
+    
+    @JsonPropertyName("SEMIMAJOR_AXIS")
+    String smaString;
+    
+    @JsonPropertyName("PERIOD")
+    String periodString;
+    
+    @JsonPropertyName("APOAPSIS")
+    String apoapsisString;
+    
+    @JsonPropertyName("PERIAPSIS")
+    String periapsisString;
+    
+End;]]></FreeFormScript>
+      </FreeForm>
+      <FreeForm enabled="true">
+        <Label>FreeForm</Label>
+        <Bookmarks />
+        <Breakpoints />
+        <FreeFormScript><![CDATA[JsonInterface json;
+
+List<CatDataPoint> satData;
+
+json.DeserializeFromFile('sats.json', satData);
+
+Formation analystCatalog;
+
+Formation leo;
+Formation geo;
+Formation launch;
+
+Variable eccentric;
+
+String epochFormat = "YYYY-MM-DDThh:mm:ss.fs";
+
+Array noradIds;
+Array leoIds;
+Array inclinations;
+Array raans;
+Array smas;
+Array leoPerigees;
+Array leoApogees;
+List<Array> leoApseHeights[2];
+leoApseHeights[0] := leoPerigees;
+leoApseHeights[1] := leoApogees;
+List<Array> ids[2];
+ids[0] := leoIds;
+ids[1] := leoIds;
+
+Variable i;
+Spacecraft sat;
+CatDataPoint data;
+Variable M;
+Variable period;
+
+Define Procedure makePopulationSeries(
+        Array data,         /// [Input]  Values to make population series out of
+        Variable numBins,   /// [Input]  Number of bins to divide population into
+        Array bins,         /// [Output] Array of bin midpoints, size of numBins
+        Array counts);      /// [Output] Each element of count contains the number of elements of data within the bin at that index
+    
+    Variable minimum = data.Min;    /// Minimum element of data
+    Variable maximum = data.Max;    /// Maximum element of data
+    Variable binSize = (maximum - minimum) / numBins;   /// Size of bin in units of data
+    
+    Variable binMin = minimum;  /// Minimum value (inclusive) of current bin
+    Variable binMax;    /// Maximum value (exclusive) of current bin
+    Variable binIndex;  /// Index of current bin
+    Variable dataIndex; /// Index of current data element
+    
+    counts.Clear();
+    bins.Clear();
+    counts.Dimension = numBins;
+    bins.Dimension = numBins;
+    
+    // Loop over each bin
+    For binIndex = 0 to numBins - 1;
+        
+        binMax = binMin + binSize;
+        bins[binIndex] = (binMax + binMin) / 2; // Bin value is midpoint of bin
+        
+        // Count number of data elements within that bin
+        For dataIndex = 0 to data.Dimension - 1;
+            If (binMin <= data[dataIndex] and data[dataIndex] < binMax);
+                counts[binIndex]++;
+            End;
+        End;
+        
+        binMin = binMax;
+        
+    End;
+   
+    // Add any data of val maximum to last bin (we want if statement to include upper bound for last bin only)
+    For dataIndex = 0 to data.Dimension - 1;
+        If (data[dataIndex] == maximum);
+            counts[counts.Dimension - 1]++;
+        End;
+    End;
+    
+EndProcedure;
+
+// Load satData into sc in analystCatalog
+For i = 0 to satData.Count - 1;
+    
+    analystCatalog.Count++;
+    
+    sat := analystCatalog[i];
+    data := satData[i];
+    
+    sat.Epoch = data.epochString.ParseCalendarDate(epochFormat);
+    sat.A = data.smaString.ToVariable();
+    sat.I = data.inclinationString.ToVariable();
+    sat.E = data.eccentricityString.ToVariable();
+    sat.RAAN = data.raanString.ToVariable();
+    sat.W = deg(data.aopString.ToVariable());
+    M = data.meanAnomalyString.ToVariable();
+    sat.TA = M + (2 * sat.E - 0.25 * sat.E^3) * sin(rad(M)) + 5/4 * sat.E^2 * sin(2*rad(M)) + 13/12 * sat.E^3 * sin(3 * rad(M));
+   
+    noradIds.Dimension++;
+    noradIds[noradIds.Dimension - 1] = data.noradCatId.ToVariable();
+    
+    sat.DisplayName = data.noradCatId;
+    sat.OrbitNumberCumulative = data.revAtEpochString.ToVariable();
+    
+    inclinations.Dimension++;
+    raans.Dimension++;
+    smas.Dimension++;
+    
+    inclinations[inclinations.Dimension - 1] = sat.I;
+    raans[raans.Dimension - 1] = sat.RAAN;
+    smas[smas.Dimension - 1] = sat.A;
+    
+    If (sat.E > 0.1);
+        eccentric++;
+    End;
+    
+    period = data.periodString.ToVariable();
+    If (sat.Height < 100);
+        launch.Count++;
+        launch[launch.Count - 1] := sat;
+    End;
+    If (period < 128);
+        leo.Count++;
+        leo[leo.Count - 1] := sat;
+        leoApogees.Dimension++;
+        leoApogees[leoApogees.Dimension - 1] = sat.Apogee;
+        leoPerigees.Dimension++;
+        leoPerigees[leoPerigees.Dimension - 1] = sat.Perigee;
+        leoIds.Dimension++;
+        leoIds[leoIds.Dimension - 1] = data.noradCatId.ToVariable();
+    ElseIf (1430 < period and period < 1450);
+        geo.Count++;
+        geo[geo.Count - 1] := sat;
+    End;
+    
+End;
+
+Array inclinationBins;
+Array inclinationCounts;
+
+Call makePopulationSeries(inclinations, 45, inclinationBins, inclinationCounts);
+
+PlotWindow incChart;
+PlotWindow raanPlot;
+PlotWindow smaPlot;
+PlotWindow leoApsesPlot;
+
+Call ConfigurePlotWindow(incChart, 1, 1, 18, "Verdana Pro SemiBold", "dark", "SeabornDeep");
+Call ConfigurePlotWindow(raanPlot, 1, 1, 18, "Verdana Pro SemiBold", "dark", "SeabornDeep");
+Call ConfigurePlotWindow(smaPlot, 1, 1, 18, "Verdana Pro SemiBold", "dark", "SeabornDeep");
+Call ConfigurePlotWindow(leoApsesPlot, 1, 1, 18, "Veranda Pro SemiBold", "dark", "SeabornDeep");
+
+Array idRange = {80000, 90000};
+
+Call MakeBarChart(
+    incChart,
+    1,
+    inclinationBins,
+    inclinationCounts,
+    "Inclination [deg]",
+    "Count",
+    {}, 
+    {},
+    "Inclinations", 
+    "");
+Variable inclinationLabelHeight = 0.2;
+Call AddFloatingLabelToPlot(incChart, 97, inclinationCounts.Max() * inclinationLabelHeight, 999999, -999, "Verdana Pro", 8, "Sun-Synchronous");
+Call AddFloatingLabelToPlot(incChart, 68, inclinationCounts.Max() * inclinationLabelHeight, 999999, -999, "Verdana Pro", 8, "Polar");
+Call AddFloatingLabelToPlot(incChart, 57, inclinationCounts.Max() * (0.15 + inclinationLabelHeight), 999999, -999, "Verdana Pro", 8, "Critical Inclination");
+Call AddFloatingLabelToPlot(incChart, 06, inclinationCounts.Max() * inclinationLabelHeight, 999999, -999, "Verdana Pro", 8, "Equatorial");
+incChart.Series[0].MarkersVisible = 0;
+incChart.Series[0].LineStyle = 0;
+incChart.Series[0].LineColor = incChart.Series[0].LineColor;
+incChart.Series[0].LineWidth = 20;
+Call MakePlot(
+    raanPlot,
+    noradIds,
+    raans,
+    "NORAD ID",
+    "RAAN (deg)",
+    idRange, 
+    {0, 360},
+    "RAAN", 
+    "");
+Call MakePlot(
+    smaPlot,
+    noradIds,
+    smas,
+    "NORAD ID",
+    "SMA (km)",
+    idRange, 
+    {0, 50000},
+    "SMA", 
+    "");
+Call MakePlots(
+    leoApsesPlot,
+    ids,
+    leoApseHeights,
+    "NORAD ID",
+    "Apsis Height",
+    idRange, 
+    {6000, 10000},
+    "LEO Perigee and Apogee Height", 
+    "");
+
+Call FormatSingleSeries(incChart, 0, 1, 0, incChart.Series[0].MarkersColor, "");
+Call FormatSingleSeries(raanPlot, 0, 1, 0, raanPlot.Series[0].MarkersColor, "");
+Call FormatSingleSeries(smaPlot, 0, 1, 0, smaPlot.Series[0].MarkersColor, "");
+Call FormatSingleSeries(leoApsesPlot, 0, 1, 0, leoApsesPlot.Series[0].MarkersColor, "Perigee");
+Call FormatSingleSeries(leoApsesPlot, 1, 1, 0, leoApsesPlot.Series[1].MarkersColor, "Apogee");
+
+incChart.Series[0].LineVisible = 0;
+incChart.Series[0].MarkersVisible = 1;
+raanPlot.Series[0].LineVisible = 0;
+raanPlot.Series[0].MarkersVisible = 1;
+smaPlot.Series[0].LineVisible = 0;
+smaPlot.Series[0].MarkersVisible = 1;
+leoApsesPlot.Series[0].LineVisible = 0;
+leoApsesPlot.Series[0].MarkersVisible = 1;
+leoApsesPlot.Series[1].LineVisible = 0;
+leoApsesPlot.Series[1].MarkersVisible = 1;
+
+incChart.Legend.Visible = 0;
+raanPlot.Legend.Visible = 0;
+smaPlot.Legend.Visible = 0;
+
+Update incChart;
+Update raanPlot;
+Update smaPlot;
+Update leoApsesPlot;
+
+
+analystCatalog.ViewAsGroup = 0;
+
+ViewWindow vw;
+
+vw.AddObject(analystCatalog);
+vw.SetObjectColor(analystCatalog.ObjectId, ColorTools.Red);
+vw.AddObject(launch);
+vw.SetObjectColor(launch.ObjectId, ColorTools.Pink);
+vw.AddObject(leo);
+vw.SetObjectColor(leo.ObjectId, ColorTools.Cyan);
+vw.AddObject(geo);
+vw.SetObjectColor(geo.ObjectId, ColorTools.Blue);
+
+analystCatalog.ViewAsGroup = 0;
+
+//While (analystCatalog[0].ElapsedTime <= TimeSpan.FromDays(1));
+//    
+//   // Step analystCatalog;
+//    //Update vw;
+//    
+//End;]]></FreeFormScript>
+      </FreeForm>
+    </ProjectCommands>
+  </ProjectMissionSequence>
+  <ProjectScript><![CDATA[
+Struct CatDataPoint;
+    
+    @JsonPropertyName("CREATION_DATE")
+    String createdDateString;
+    
+    @JsonPropertyName("TIME_SYSTEM")
+    String timeSystem;
+    
+    @JsonPropertyName("EPOCH")
+    String epochString;
+    
+    @JsonPropertyName("MEAN_MOTION")
+    String meanMotionString;
+    
+    @JsonPropertyName("ECCENTRICITY")
+    String eccentricityString;
+    
+    @JsonPropertyName("INCLINATION")
+    String inclinationString;
+    
+    @JsonPropertyName("RA_OF_ASC_NODE")
+    String raanString;
+    
+    @JsonPropertyName("ARG_OF_PERICENTER")
+    String aopString;
+    
+    @JsonPropertyName("MEAN_ANOMALY")
+    String meanAnomalyString;    
+    
+    @JsonPropertyName("NORAD_CAT_ID")
+    String noradCatId;    
+    
+    @JsonPropertyName("REV_AT_EPOCH")
+    String revAtEpochString;
+    
+    @JsonPropertyName("BSTAR")
+    String bStarString;
+    
+    @JsonPropertyName("MEAN_MOTION_DOT")
+    String meanMotionDotString;
+    
+    @JsonPropertyName("MEAN_MOTION_DDOT")
+    String meanMotionDDotString;
+    
+    @JsonPropertyName("SEMIMAJOR_AXIS")
+    String smaString;
+    
+    @JsonPropertyName("PERIOD")
+    String periodString;
+    
+    @JsonPropertyName("APOAPSIS")
+    String apoapsisString;
+    
+    @JsonPropertyName("PERIAPSIS")
+    String periapsisString;
+    
+End;
+JsonInterface json;
+
+List<CatDataPoint> satData;
+
+json.DeserializeFromFile('sats.json', satData);
+
+Formation analystCatalog;
+
+Formation leo;
+Formation geo;
+Formation launch;
+
+Variable eccentric;
+
+String epochFormat = "YYYY-MM-DDThh:mm:ss.fs";
+
+Array noradIds;
+Array leoIds;
+Array inclinations;
+Array raans;
+Array smas;
+Array leoPerigees;
+Array leoApogees;
+List<Array> leoApseHeights[2];
+leoApseHeights[0] := leoPerigees;
+leoApseHeights[1] := leoApogees;
+List<Array> ids[2];
+ids[0] := leoIds;
+ids[1] := leoIds;
+
+Variable i;
+Spacecraft sat;
+CatDataPoint data;
+Variable M;
+Variable period;
+
+Define Procedure makePopulationSeries(
+        Array data,         /// [Input]  Values to make population series out of
+        Variable numBins,   /// [Input]  Number of bins to divide population into
+        Array bins,         /// [Output] Array of bin midpoints, size of numBins
+        Array counts);      /// [Output] Each element of count contains the number of elements of data within the bin at that index
+    
+    Variable minimum = data.Min;    /// Minimum element of data
+    Variable maximum = data.Max;    /// Maximum element of data
+    Variable binSize = (maximum - minimum) / numBins;   /// Size of bin in units of data
+    
+    Variable binMin = minimum;  /// Minimum value (inclusive) of current bin
+    Variable binMax;    /// Maximum value (exclusive) of current bin
+    Variable binIndex;  /// Index of current bin
+    Variable dataIndex; /// Index of current data element
+    
+    counts.Clear();
+    bins.Clear();
+    counts.Dimension = numBins;
+    bins.Dimension = numBins;
+    
+    // Loop over each bin
+    For binIndex = 0 to numBins - 1;
+        
+        binMax = binMin + binSize;
+        bins[binIndex] = (binMax + binMin) / 2; // Bin value is midpoint of bin
+        
+        // Count number of data elements within that bin
+        For dataIndex = 0 to data.Dimension - 1;
+            If (binMin <= data[dataIndex] and data[dataIndex] < binMax);
+                counts[binIndex]++;
+            End;
+        End;
+        
+        binMin = binMax;
+        
+    End;
+   
+    // Add any data of val maximum to last bin (we want if statement to include upper bound for last bin only)
+    For dataIndex = 0 to data.Dimension - 1;
+        If (data[dataIndex] == maximum);
+            counts[counts.Dimension - 1]++;
+        End;
+    End;
+    
+EndProcedure;
+
+// Load satData into sc in analystCatalog
+For i = 0 to satData.Count - 1;
+    
+    analystCatalog.Count++;
+    
+    sat := analystCatalog[i];
+    data := satData[i];
+    
+    sat.Epoch = data.epochString.ParseCalendarDate(epochFormat);
+    sat.A = data.smaString.ToVariable();
+    sat.I = data.inclinationString.ToVariable();
+    sat.E = data.eccentricityString.ToVariable();
+    sat.RAAN = data.raanString.ToVariable();
+    sat.W = deg(data.aopString.ToVariable());
+    M = data.meanAnomalyString.ToVariable();
+    sat.TA = M + (2 * sat.E - 0.25 * sat.E^3) * sin(rad(M)) + 5/4 * sat.E^2 * sin(2*rad(M)) + 13/12 * sat.E^3 * sin(3 * rad(M));
+   
+    noradIds.Dimension++;
+    noradIds[noradIds.Dimension - 1] = data.noradCatId.ToVariable();
+    
+    sat.DisplayName = data.noradCatId;
+    sat.OrbitNumberCumulative = data.revAtEpochString.ToVariable();
+    
+    inclinations.Dimension++;
+    raans.Dimension++;
+    smas.Dimension++;
+    
+    inclinations[inclinations.Dimension - 1] = sat.I;
+    raans[raans.Dimension - 1] = sat.RAAN;
+    smas[smas.Dimension - 1] = sat.A;
+    
+    If (sat.E > 0.1);
+        eccentric++;
+    End;
+    
+    period = data.periodString.ToVariable();
+    If (sat.Height < 100);
+        launch.Count++;
+        launch[launch.Count - 1] := sat;
+    End;
+    If (period < 128);
+        leo.Count++;
+        leo[leo.Count - 1] := sat;
+        leoApogees.Dimension++;
+        leoApogees[leoApogees.Dimension - 1] = sat.Apogee;
+        leoPerigees.Dimension++;
+        leoPerigees[leoPerigees.Dimension - 1] = sat.Perigee;
+        leoIds.Dimension++;
+        leoIds[leoIds.Dimension - 1] = data.noradCatId.ToVariable();
+    ElseIf (1430 < period and period < 1450);
+        geo.Count++;
+        geo[geo.Count - 1] := sat;
+    End;
+    
+End;
+
+Array inclinationBins;
+Array inclinationCounts;
+
+Call makePopulationSeries(inclinations, 45, inclinationBins, inclinationCounts);
+
+PlotWindow incChart;
+PlotWindow raanPlot;
+PlotWindow smaPlot;
+PlotWindow leoApsesPlot;
+
+Call ConfigurePlotWindow(incChart, 1, 1, 18, "Verdana Pro SemiBold", "dark", "SeabornDeep");
+Call ConfigurePlotWindow(raanPlot, 1, 1, 18, "Verdana Pro SemiBold", "dark", "SeabornDeep");
+Call ConfigurePlotWindow(smaPlot, 1, 1, 18, "Verdana Pro SemiBold", "dark", "SeabornDeep");
+Call ConfigurePlotWindow(leoApsesPlot, 1, 1, 18, "Veranda Pro SemiBold", "dark", "SeabornDeep");
+
+Array idRange = {80000, 90000};
+
+Call MakeBarChart(
+    incChart,
+    1,
+    inclinationBins,
+    inclinationCounts,
+    "Inclination [deg]",
+    "Count",
+    {}, 
+    {},
+    "Inclinations", 
+    "");
+Variable inclinationLabelHeight = 0.2;
+Call AddFloatingLabelToPlot(incChart, 97, inclinationCounts.Max() * inclinationLabelHeight, 999999, -999, "Verdana Pro", 8, "Sun-Synchronous");
+Call AddFloatingLabelToPlot(incChart, 68, inclinationCounts.Max() * inclinationLabelHeight, 999999, -999, "Verdana Pro", 8, "Polar");
+Call AddFloatingLabelToPlot(incChart, 57, inclinationCounts.Max() * (0.15 + inclinationLabelHeight), 999999, -999, "Verdana Pro", 8, "Critical Inclination");
+Call AddFloatingLabelToPlot(incChart, 06, inclinationCounts.Max() * inclinationLabelHeight, 999999, -999, "Verdana Pro", 8, "Equatorial");
+incChart.Series[0].MarkersVisible = 0;
+incChart.Series[0].LineStyle = 0;
+incChart.Series[0].LineColor = incChart.Series[0].LineColor;
+incChart.Series[0].LineWidth = 20;
+Call MakePlot(
+    raanPlot,
+    noradIds,
+    raans,
+    "NORAD ID",
+    "RAAN (deg)",
+    idRange, 
+    {0, 360},
+    "RAAN", 
+    "");
+Call MakePlot(
+    smaPlot,
+    noradIds,
+    smas,
+    "NORAD ID",
+    "SMA (km)",
+    idRange, 
+    {0, 50000},
+    "SMA", 
+    "");
+Call MakePlots(
+    leoApsesPlot,
+    ids,
+    leoApseHeights,
+    "NORAD ID",
+    "Apsis Height",
+    idRange, 
+    {6000, 10000},
+    "LEO Perigee and Apogee Height", 
+    "");
+
+Call FormatSingleSeries(incChart, 0, 1, 0, incChart.Series[0].MarkersColor, "");
+Call FormatSingleSeries(raanPlot, 0, 1, 0, raanPlot.Series[0].MarkersColor, "");
+Call FormatSingleSeries(smaPlot, 0, 1, 0, smaPlot.Series[0].MarkersColor, "");
+Call FormatSingleSeries(leoApsesPlot, 0, 1, 0, leoApsesPlot.Series[0].MarkersColor, "Perigee");
+Call FormatSingleSeries(leoApsesPlot, 1, 1, 0, leoApsesPlot.Series[1].MarkersColor, "Apogee");
+
+incChart.Series[0].LineVisible = 0;
+incChart.Series[0].MarkersVisible = 1;
+raanPlot.Series[0].LineVisible = 0;
+raanPlot.Series[0].MarkersVisible = 1;
+smaPlot.Series[0].LineVisible = 0;
+smaPlot.Series[0].MarkersVisible = 1;
+leoApsesPlot.Series[0].LineVisible = 0;
+leoApsesPlot.Series[0].MarkersVisible = 1;
+leoApsesPlot.Series[1].LineVisible = 0;
+leoApsesPlot.Series[1].MarkersVisible = 1;
+
+incChart.Legend.Visible = 0;
+raanPlot.Legend.Visible = 0;
+smaPlot.Legend.Visible = 0;
+
+Update incChart;
+Update raanPlot;
+Update smaPlot;
+Update leoApsesPlot;
+
+
+analystCatalog.ViewAsGroup = 0;
+
+ViewWindow vw;
+
+vw.AddObject(analystCatalog);
+vw.SetObjectColor(analystCatalog.ObjectId, ColorTools.Red);
+vw.AddObject(launch);
+vw.SetObjectColor(launch.ObjectId, ColorTools.Pink);
+vw.AddObject(leo);
+vw.SetObjectColor(leo.ObjectId, ColorTools.Cyan);
+vw.AddObject(geo);
+vw.SetObjectColor(geo.ObjectId, ColorTools.Blue);
+
+analystCatalog.ViewAsGroup = 0;
+
+//While (analystCatalog[0].ElapsedTime <= TimeSpan.FromDays(1));
+//    
+//   // Step analystCatalog;
+//    //Update vw;
+//    
+//End;]]></ProjectScript>
+  <ProjectNotes></ProjectNotes>
+</FreeFlyerProjectFile>
