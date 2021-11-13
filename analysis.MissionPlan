@@ -174,6 +174,7 @@ String epochFormat = "YYYY-MM-DDThh:mm:ss.fs";
 Array noradIds;
 Array leoIds;
 Array inclinations;
+Array eccentricities;
 Array raans;
 Array smas;
 Array leoPerigees;
@@ -261,10 +262,12 @@ For i = 0 to satData.Count - 1;
     sat.OrbitNumberCumulative = data.revAtEpochString.ToVariable();
     
     inclinations.Dimension++;
+    eccentricities.Dimension++;
     raans.Dimension++;
     smas.Dimension++;
     
     inclinations[inclinations.Dimension - 1] = sat.I;
+    eccentricities[eccentricities.Dimension - 1] = sat.E;
     raans[raans.Dimension - 1] = sat.RAAN;
     smas[smas.Dimension - 1] = sat.A;
     
@@ -295,15 +298,20 @@ End;
 
 Array inclinationBins;
 Array inclinationCounts;
-
 Call makePopulationSeries(inclinations, 45, inclinationBins, inclinationCounts);
 
+Array eccentricityBins;
+Array eccentricityCounts;
+Call makePopulationSeries(eccentricities, 50, eccentricityBins, eccentricityCounts);
+
 PlotWindow incChart;
+PlotWindow eccChart;
 PlotWindow raanPlot;
 PlotWindow smaPlot;
 PlotWindow leoApsesPlot;
 
 Call ConfigurePlotWindow(incChart, 1, 1, 18, "Verdana Pro SemiBold", "dark", "SeabornDeep");
+Call ConfigurePlotWindow(eccChart, 1, 1, 18, "Verdana Pro SemiBold", "dark", "SeabornDeep");
 Call ConfigurePlotWindow(raanPlot, 1, 1, 18, "Verdana Pro SemiBold", "dark", "SeabornDeep");
 Call ConfigurePlotWindow(smaPlot, 1, 1, 18, "Verdana Pro SemiBold", "dark", "SeabornDeep");
 Call ConfigurePlotWindow(leoApsesPlot, 1, 1, 18, "Veranda Pro SemiBold", "dark", "SeabornDeep");
@@ -326,6 +334,23 @@ Call AddFloatingLabelToPlot(incChart, 97, inclinationCounts.Max() * inclinationL
 Call AddFloatingLabelToPlot(incChart, 68, inclinationCounts.Max() * inclinationLabelHeight, 999999, -999, "Verdana Pro", 8, "Polar");
 Call AddFloatingLabelToPlot(incChart, 57, inclinationCounts.Max() * (0.15 + inclinationLabelHeight), 999999, -999, "Verdana Pro", 8, "Critical Inclination");
 Call AddFloatingLabelToPlot(incChart, 06, inclinationCounts.Max() * inclinationLabelHeight, 999999, -999, "Verdana Pro", 8, "Equatorial");
+incChart.Series[0].MarkersVisible = 0;
+incChart.Series[0].LineStyle = 0;
+incChart.Series[0].LineColor = incChart.Series[0].LineColor;
+incChart.Series[0].LineWidth = 20;
+Call MakeBarChart(
+    eccChart,
+    1,
+    eccentricityBins,
+    eccentricityCounts,
+    "Eccentricity",
+    "Count",
+    {}, 
+    {},
+    "", 
+    "");
+Variable eccentricityLabelHeight = 0.25;
+Call AddFloatingLabelToPlot(eccChart, 0.7, eccentricityCounts.Max() * eccentricityLabelHeight, 999999, -999, "Verdana Pro", 8, "Molyna");
 incChart.Series[0].MarkersVisible = 0;
 incChart.Series[0].LineStyle = 0;
 incChart.Series[0].LineColor = incChart.Series[0].LineColor;
@@ -489,6 +514,7 @@ String epochFormat = "YYYY-MM-DDThh:mm:ss.fs";
 Array noradIds;
 Array leoIds;
 Array inclinations;
+Array eccentricities;
 Array raans;
 Array smas;
 Array leoPerigees;
@@ -576,10 +602,12 @@ For i = 0 to satData.Count - 1;
     sat.OrbitNumberCumulative = data.revAtEpochString.ToVariable();
     
     inclinations.Dimension++;
+    eccentricities.Dimension++;
     raans.Dimension++;
     smas.Dimension++;
     
     inclinations[inclinations.Dimension - 1] = sat.I;
+    eccentricities[eccentricities.Dimension - 1] = sat.E;
     raans[raans.Dimension - 1] = sat.RAAN;
     smas[smas.Dimension - 1] = sat.A;
     
@@ -610,15 +638,20 @@ End;
 
 Array inclinationBins;
 Array inclinationCounts;
-
 Call makePopulationSeries(inclinations, 45, inclinationBins, inclinationCounts);
 
+Array eccentricityBins;
+Array eccentricityCounts;
+Call makePopulationSeries(eccentricities, 50, eccentricityBins, eccentricityCounts);
+
 PlotWindow incChart;
+PlotWindow eccChart;
 PlotWindow raanPlot;
 PlotWindow smaPlot;
 PlotWindow leoApsesPlot;
 
 Call ConfigurePlotWindow(incChart, 1, 1, 18, "Verdana Pro SemiBold", "dark", "SeabornDeep");
+Call ConfigurePlotWindow(eccChart, 1, 1, 18, "Verdana Pro SemiBold", "dark", "SeabornDeep");
 Call ConfigurePlotWindow(raanPlot, 1, 1, 18, "Verdana Pro SemiBold", "dark", "SeabornDeep");
 Call ConfigurePlotWindow(smaPlot, 1, 1, 18, "Verdana Pro SemiBold", "dark", "SeabornDeep");
 Call ConfigurePlotWindow(leoApsesPlot, 1, 1, 18, "Veranda Pro SemiBold", "dark", "SeabornDeep");
@@ -641,6 +674,23 @@ Call AddFloatingLabelToPlot(incChart, 97, inclinationCounts.Max() * inclinationL
 Call AddFloatingLabelToPlot(incChart, 68, inclinationCounts.Max() * inclinationLabelHeight, 999999, -999, "Verdana Pro", 8, "Polar");
 Call AddFloatingLabelToPlot(incChart, 57, inclinationCounts.Max() * (0.15 + inclinationLabelHeight), 999999, -999, "Verdana Pro", 8, "Critical Inclination");
 Call AddFloatingLabelToPlot(incChart, 06, inclinationCounts.Max() * inclinationLabelHeight, 999999, -999, "Verdana Pro", 8, "Equatorial");
+incChart.Series[0].MarkersVisible = 0;
+incChart.Series[0].LineStyle = 0;
+incChart.Series[0].LineColor = incChart.Series[0].LineColor;
+incChart.Series[0].LineWidth = 20;
+Call MakeBarChart(
+    eccChart,
+    1,
+    eccentricityBins,
+    eccentricityCounts,
+    "Eccentricity",
+    "Count",
+    {}, 
+    {},
+    "", 
+    "");
+Variable eccentricityLabelHeight = 0.25;
+Call AddFloatingLabelToPlot(eccChart, 0.7, eccentricityCounts.Max() * eccentricityLabelHeight, 999999, -999, "Verdana Pro", 8, "Molyna");
 incChart.Series[0].MarkersVisible = 0;
 incChart.Series[0].LineStyle = 0;
 incChart.Series[0].LineColor = incChart.Series[0].LineColor;
